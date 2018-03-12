@@ -1,4 +1,4 @@
-% Iteration bound for #3
+% Iteration bound
 clear all;
 
 %% Define the input
