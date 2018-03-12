@@ -1,0 +1,227 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+% \numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+% \numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+% \numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+% Custom packages
+\usepackage{xeCJK} 	% Chinese characters support
+\setCJKmainfont{Hiragino Sans GB}
+
+\usepackage{float}
+\usepackage{hyperref}
+
+\usepackage{listings}
+\lstset{ 
+    language=Matlab,                        % choose the language of the code
+%   basicstyle=10pt,                    % the size of the fonts that are used for the code
+    numbers=left,                           % where to put the line-numbers
+    numberstyle=\footnotesize,              % the size of the fonts that are used for the line-numbers
+    stepnumber=1,                               % the step between two line-numbers. If it's 1 each line will be numbered
+    numbersep=5pt,                          % how far the line-numbers are from the code
+%   backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+    showspaces=false,                       % show spaces adding particular underscores
+    showstringspaces=false,                 % underline spaces within strings
+    showtabs=false,                             % show tabs within strings adding particular underscores
+%   frame=single,                               % adds a frame around the code
+%   tabsize=2,                              % sets default tabsize to 2 spaces
+%   captionpos=b,                               % sets the caption-position to bottom
+    breaklines=true,                            % sets automatic line breaking
+    breakatwhitespace=false,                % sets if automatic breaks should only happen at whitespace
+    escapeinside={\%*}{*)}                  % if you want to add a comment within your code
+}
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{VLSI Digital Signal Processing} \\ [25pt] % Course name
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge 第2章 迭代边界 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{郭一隆} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{整体思路}
+\subsection{LPM算法实现} % (fold)
+\label{sub:lpm算法实现}
+
+利用\texttt{MATLAB}实现LPM算法，以\texttt{d}（延迟节点数目）和$L^{(1)}$作为输入，详见附录\texttt{LPM.m}。
+
+\textbf{注：将LPM算法中~-1的定义进一步修改为~$-\infty$，方便MATLAB运算。}
+
+% subsection lpm算法实现 (end)
+
+\subsection{$L^{(1)}$求解} % (fold)
+\label{sub:L1求解}
+
+\begin{itemize}
+    \item 对于第1题、第3题，DFG结构较简单，$L^{(1)}$可直接得到；
+    \item 对于第5题，DFG结构复杂，用递归的动态规划算法求解任意两个延迟节点之间的最长路径（不经过其他延迟节点），从而获得$L^{(1)}$，详见附录\texttt{p5\_graph.m}。
+\end{itemize}
+
+% subsection L1求解 (end)
+
+\subsection{$L$序列求解} % (fold)
+\label{sub:}
+
+利用$L^{(m)}$与$L^{(\left\lfloor m/2\right\rfloor)}$、$L^{(\left\lceil m/2\right\rceil)}$的关系进行递归求解，降低复杂度。
+
+% subsection  (end)
+
+\section{问题求解} % (fold)
+\label{sec:问题求解}
+
+\subsection{Problem 1} % (fold)
+\label{sub:1}
+
+输入：
+\begin{itemize}
+    \item $d=3$
+    \item $L^{(1)} = \begin{bmatrix}
+        -\infty & 0 & -\infty \\
+        7 & -\infty & 3 \\
+        3 & -\infty & -\infty \\
+    \end{bmatrix} $
+\end{itemize}
+
+运行\texttt{iteration\_bound.m}可得输出：
+\begin{itemize}
+    \item \texttt{iteration\_bound = 3.5}
+\end{itemize}
+
+% subsection 1 (end)
+
+\subsection{Problem 3} % (fold)
+\label{sub:problem_3}
+
+输入：
+\begin{itemize}
+    \item $d=6$
+    \item $L^{(1)} = \begin{bmatrix}
+        4 & 4 & 4 & -\infty & 4 & -\infty \\
+        -\infty & -\infty & -\infty & -\infty & -\infty & -\infty \\
+        -\infty & -\infty & -\infty & 0 & -\infty & -\infty \\
+        4 & 4 & 4 & -\infty & 4 & -\infty \\
+        -\infty & -\infty & -\infty & -\infty & -\infty & 0 \\
+        -\infty & -\infty & -\infty & -\infty & -\infty & -\infty \\
+    \end{bmatrix} $
+\end{itemize}
+
+运行\texttt{iteration\_bound.m}可得输出：
+\begin{itemize}
+    \item \texttt{iteration\_bound = 4}
+\end{itemize}
+
+% subsection problem_3 (end)
+
+\subsection{Problem 5} % (fold)
+\label{sub:problem_5}
+
+运行\texttt{p5\_graph.m}可得输入：
+\begin{itemize}
+    \item $d=7$
+    \item $L^{(1)} = \begin{bmatrix}
+        16 & 16 & -\infty & -\infty & 16 & -\infty & -\infty \\
+        -\infty & 4 & -\infty & -\infty & -\infty & -\infty & -\infty \\
+        15 & 15 & -\infty & -\infty & 15 & -\infty & -\infty \\
+        14 & 14 & -\infty & -\infty & 14 & -\infty & -\infty \\
+        -\infty & -\infty & -\infty & -\infty & 4 & -\infty & -\infty \\
+        14 & 14 & -\infty & -\infty & 14 & -\infty & -\infty \\
+        14 & 14 & -\infty & -\infty & 14 & -\infty & -\infty \\
+    \end{bmatrix} $
+
+    （按图中自左到右顺序依次将D节点编号为D\textsubscript{1}到D\textsubscript{7}）
+\end{itemize}
+
+运行\texttt{iteration\_bound.m}可得输出：
+\begin{itemize}
+    \item \texttt{iteration\_bound = 16}
+\end{itemize}
+
+% subsection problem_5 (end)
+
+% section 问题求解 (end)
+\newpage
+\section*{A. 附录} % (fold)
+\label{sec:附录}
+
+\small 所有源码已上传至 \texttt{https://github.com/Nuullll/iteration-bound}
+
+\subsection*{\texttt{iteration\_bound.m}} % (fold)
+
+\lstinputlisting[language=Matlab]{../src/iteration_bound.m}
+
+\subsection*{\texttt{p5\_graph.m}} % (fold)
+
+\lstinputlisting[language=Matlab]{../src/p5_graph.m}
+
+\subsection*{\texttt{findLongestPath.m}} % (fold)
+
+\lstinputlisting[language=Matlab]{../src/findLongestPath.m}
+
+\subsection*{\texttt{LPM.m}} % (fold)
+
+\lstinputlisting[language=Matlab]{../src/LPM.m}
+
+\subsection*{\texttt{getIterationBound.m}} % (fold)
+
+\lstinputlisting[language=Matlab]{../src/getIterationBound.m}
+
+% section 附录 (end)
+
+\end{document}
